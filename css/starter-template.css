@@ -18,10 +18,11 @@ height:100%;
 
 .demo{
 	width:200px;	
+  height:200px;
 	border:0px solid red;  
 }
 
-
+/*
 .slick-slider{
   height: 100%;
 }
@@ -30,6 +31,9 @@ height:100%;
 .slick-track {
   height: 100%;
 }
+
+
+*/
 
 .slick-prev {
   left: 0;
@@ -46,6 +50,7 @@ height:100%;
   min-height: 28px;
   background-color: rgba(255, 255, 255, 0.5);
   z-index: 50;
+  /*display: none;*/
 }
 
 .f1{color: blue;}
@@ -53,3 +58,4 @@ height:100%;
 .slick-slide {
   position: relative;
 }
+

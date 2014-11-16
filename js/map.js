@@ -5,7 +5,7 @@ $(document).ready(function() {
   var content = '';
   var lineCoordinates;
   var infowindow = new google.maps.InfoWindow();
-  var linePath;
+  var linePath, originMarker;
   
   function initialize() {
     var mapOptions = {
@@ -33,7 +33,7 @@ $(document).ready(function() {
             var redCircle = {path: google.maps.SymbolPath.CIRCLE, fillColor: '#DF013A', fillOpacity: 1, scale: 6, strokeColor: '#610B0B', strokeWeight: 2 };
 
             for (var n in locations) {
-              console.log(locations[n]);               
+              //console.log(locations[n]);               
               var marker = new google.maps.Marker({position: new google.maps.LatLng(locations[n][4], locations[n][3]),icon: redCircle,map: map});                          
               
               google.maps.event.addListener(marker,'click', (function(marker,content,infowindow){                                   
@@ -41,46 +41,58 @@ $(document).ready(function() {
                   return function() {      
                     content = '<div class="slider demo">';
                     for(var y= 0;y<arraydata.length;y++) {
+                        
                         var item = arraydata[y];                        
                         if(item[1] == itemID) {
+                          console.log(y);
                           content += "<div class='slick-slide slick-active'><img src=images/" +  item[2] + "><div class='caption'> " + item[7]+ "<a class='f1'> Add Line</a></div></div>";                          
                         }
                     };                    
-                    content += "</div>";                    
-                    infowindow.setContent(content);
-                    infowindow.open(map,marker);                                                         
-                    
+                    content += "</div>";
                     //start the carosuel
-                    $('.demo').slick({
-                      dots: false,                      
+                                       
+                    infowindow.setContent(content);                     
+                    infowindow.open(map,marker);
+                    $('.demo').slick({                      
                       centerMode: true,                      
                       variableWidth: true,  
                       arrows: true,
                       slideToShow: 1                                            
-                    });
+                    });                                                
+                    
+                    
                   };
               })(marker,content,infowindow));              
         }    
     });   
   } 
   
-  // add line connection 
+  // add line connection and orgin location 
   google.maps.event.addListener(infowindow, 'domready', function() {
+    // fade in/out the caption
+    $('.demo').hover(function() { 
+        $('.caption').fadeIn(); 
+      }, function() { 
+        $('.caption').fadeOut(); 
+    });
+    
     var lineCoordinates;
-    console.log(linePath) 
+    var originIcon = {path: google.maps.SymbolPath.CIRCLE, fillColor: '#FFFF00', fillOpacity: 1, scale: 4, strokeColor: '#013ADF', strokeWeight: 2 };
+    //console.log(linePath) 
     $('.f1').on('click', function (event) {
         //console.log(arraydata)
-        if (typeof(linePath) != "undefined"){linePath.setMap(null);}      
+        if (typeof(linePath) != "undefined"){linePath.setMap(null);originMarker.setMap(null);}      
         for(var y= 0;y<arraydata.length;y++) {
           var item = arraydata[y];
           if(arraydata[y][2] == $('.slick-center').children('img').attr('src').split('/')[1]){                        
             console.log(item[2]);
-            lineCoordinates = [new google.maps.LatLng(item[4],item[3]),new google.maps.LatLng(item[6],item[5])];
+            lineCoordinates = [new google.maps.LatLng(item[4],item[3]),new google.maps.LatLng(item[6],item[5])];            
           }  
         };
 
         if (typeof(linePath) != "undefined"){linePath.setMap(null);}
-
+        originMarker = new google.maps.Marker({position: lineCoordinates[1],icon: originIcon,map: map});
+        originMarker.setMap(map);
         linePath = new google.maps.Polyline({path: lineCoordinates, geodesic: true, strokeColor: '#FF3300', strokeOpacity: .9, strokeWeight: 3 });
         linePath.setMap(map);      
         
@@ -88,7 +100,6 @@ $(document).ready(function() {
    
     
   });
-  
 
   // responsive resize
   google.maps.event.addDomListener(window, "resize", function() {
@@ -98,32 +109,7 @@ $(document).ready(function() {
   });
 
   google.maps.event.addDomListener(window, 'load', initialize);
-
-  //google.maps.event.addListener(infowindow, 'domready', function() {
-                /*document.getElementById("f1").addEventListener("click", function(e) {
-                  //e.stop();
-                    console.log("hi!");
-                  });*/
-
-              
-              
-  //            });
-
-
-  function addLine(myLine){   
-    var lineCoordinates = myLine;
-    var linePath = new google.maps.Polyline({
-      path: lineCoordinates,
-      geodesic: true,
-      strokeColor: '#FF0000',
-      strokeOpacity: 1.0,
-      strokeWeight: 2
-    });
-
-    linePath.setMap(map);
-  }  
-
-  
+ 
 });
 
 
