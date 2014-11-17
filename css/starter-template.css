@@ -18,28 +18,16 @@ height:100%;
 
 .demo{
 	width:200px;	
-  height:200px;
-	border:0px solid red;  
+	border:0px solid red;
+  background-color: #F2F2F2;  
 }
 
-/*
-.slick-slider{
-  height: 100%;
-}
-
-.slick-list,
-.slick-track {
-  height: 100%;
-}
-
-
-*/
 
 .slick-prev {
   left: 0;
 }
 .slick-next {
-  right: 0;
+  right: 0;  
 }
 
 .caption {
